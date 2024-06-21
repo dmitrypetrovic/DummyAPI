@@ -1,0 +1,394 @@
+{
+	"info": {
+		"_postman_id": "ea65a7db-3c6d-42eb-b009-aee02afca208",
+		"name": "Автотесты Post",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19078194",
+		"_collection_link": "https://gold-satellite-33240-1720.postman.co/workspace/DummyAPI~ad6b0336-bd5a-41b9-b91d-f35bb0ec4267/collection/19078194-ea65a7db-3c6d-42eb-b009-aee02afca208?action=share&source=collection_link&creator=19078194"
+	},
+	"item": [
+		{
+			"name": "GetPostList",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code name is OK\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							"\r",
+							"//Сниппет на проверку времени ответа, 500мс\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"//Проверяем, что ключ data является массивом\r",
+							"pm.test(\"Check body data is array\", function () {\r",
+							"    pm.expect(jsonData.data).to.be.an('array')\r",
+							"});\r",
+							"\r",
+							"//Проверяем, что ключ id первого объекта в массиве является строкой   \r",
+							"pm.test(\"Check body data[0].id is string\", function () {\r",
+							"    pm.expect(jsonData.data[0].id).to.be.an('String')\r",
+							"});\r",
+							"\r",
+							"//Кол-во записей на одной странице 20\r",
+							"pm.test(\"Check limit is 20\", function () {\r",
+							"    pm.expect(jsonData.limit).to.eql(20);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/post",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"post"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreatePost",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code name is OK\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							"\r",
+							"//Сниппет на проверку времени ответа, 500мс\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"//Проверяем body: ключи и значения (firstName и значение Benjamin) соответствуют друг другу\r",
+							"//Выносим переменную var за рамки функций\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"postId\", jsonData.id);\r",
+							"\r",
+							"pm.test(\"Check body firstName\", function () {\r",
+							"    console.log(\"Выводим значение firstName\");\r",
+							"    console.log(jsonData.owner.firstName);\r",
+							"    pm.expect(jsonData.owner.firstName).to.eql(\"Benjamin\");\r",
+							"});\r",
+							"\r",
+							"//Проверяем body: ключи и значения (lastName и значение Holland) соответствуют друг другу\r",
+							"pm.test(\"Check body lastName\", function () {\r",
+							"    console.log(\"Выводим значение lastName\");\r",
+							"    console.log(jsonData.owner.lastName);\r",
+							"    pm.expect(jsonData.owner.lastName).to.eql(\"Holland\");\r",
+							"});\r",
+							"\r",
+							"//Проверяем body: ключ text является строкой\r",
+							"pm.test(\"Check body text is string\", function () {\r",
+							"    pm.expect(jsonData.text).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"//Проверяем body: ключ id является строкой\r",
+							"pm.test(\"Check body id is string\", function () {\r",
+							"    pm.expect(jsonData.id).to.be.a('string');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"text\": \"It's autotests\",\r\n\"image\": null,\r\n\"likes\": 0,\r\n\"owner\":\"60d0fe4f5311236168a109f4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/post/create",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"post",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPostById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code name is OK\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							"\r",
+							"//Сниппет на проверку времени ответа, 500мс\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"//Проверяем body: ключи и значения (firstName и значение Benjamin) соответствуют друг другу\r",
+							"//Выносим переменную var за рамки функций\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"postId\", jsonData.id);\r",
+							"\r",
+							"pm.test(\"Check body firstName\", function () {\r",
+							"    console.log(\"Выводим значение firstName\");\r",
+							"    console.log(jsonData.owner.firstName);\r",
+							"    pm.expect(jsonData.owner.firstName).to.eql(\"Benjamin\");\r",
+							"});\r",
+							"\r",
+							"//Проверяем body: ключи и значения (lastName и значение Holland) соответствуют друг другу\r",
+							"pm.test(\"Check body lastName\", function () {\r",
+							"    console.log(\"Выводим значение lastName\");\r",
+							"    console.log(jsonData.owner.lastName);\r",
+							"    pm.expect(jsonData.owner.lastName).to.eql(\"Holland\");\r",
+							"});\r",
+							"\r",
+							"//Проверяем body: ключ text является строкой\r",
+							"pm.test(\"Check body text is string\", function () {\r",
+							"    pm.expect(jsonData.text).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"//Проверяем body: ключ id является строкой\r",
+							"pm.test(\"Check body id is string\", function () {\r",
+							"    pm.expect(jsonData.id).to.be.a('string');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/post/{{postId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"post",
+						"{{postId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdatePost",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code name is OK\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							"\r",
+							"//Сниппет на проверку времени ответа, 500мс\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"//Проверяем body: ключи и значения (firstName и значение Benjamin) соответствуют друг другу\r",
+							"//Выносим переменную var за рамки функций\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"postId\", jsonData.id);\r",
+							"\r",
+							"pm.test(\"Check body firstName\", function () {\r",
+							"    console.log(\"Выводим значение firstName\");\r",
+							"    console.log(jsonData.owner.firstName);\r",
+							"    pm.expect(jsonData.owner.firstName).to.eql(\"Benjamin\");\r",
+							"});\r",
+							"\r",
+							"//Проверяем body: ключи и значения (lastName и значение Holland) соответствуют друг другу\r",
+							"pm.test(\"Check body lastName\", function () {\r",
+							"    console.log(\"Выводим значение lastName\");\r",
+							"    console.log(jsonData.owner.lastName);\r",
+							"    pm.expect(jsonData.owner.lastName).to.eql(\"Holland\");\r",
+							"});\r",
+							"\r",
+							"//Проверяем body: ключ text является строкой\r",
+							"pm.test(\"Check body text is string\", function () {\r",
+							"    pm.expect(jsonData.text).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"//Проверяем body: ключ id является строкой\r",
+							"pm.test(\"Check body id is string\", function () {\r",
+							"    pm.expect(jsonData.id).to.be.a('string');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{    \r\n\"text\": \"It's autotests, update post\",\r\n\"image\": null,\r\n\"likes\": 0,\r\n\"owner\":\"60d0fe4f5311236168a109f4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/post/{{postId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"post",
+						"{{postId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeletePost",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code name is OK\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							"\r",
+							"//Сниппет на проверку времени ответа, 500мс\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"postId\"));\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/post/{{postId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"post",
+						"{{postId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "63584261ac14a0cdd4f5bc87",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "app-id",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "postId",
+			"value": ""
+		}
+	]
+}
