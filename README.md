@@ -73,7 +73,7 @@ timezone: string(Valid timezone value ex. +7:00, -1:00)
 
 ## Майнд-карта
 Данная МК представляет собой набор тестов для тестирования объекта **USER** и **POST**. Подробно расписано для **Get List**, **Create User** и **Create Post**.
-![Майнд-карта](https://imgur.com/a/N54EPYN "MK")
+[Майнд-карта](https://imgur.com/a/N54EPYN "MK")
 Также майнд-карту можно [скачать](https://github.com/dmitrypetrovic/DummyAPI/blob/main/Mindmap.xmind)
 
 ## Скриншоты
